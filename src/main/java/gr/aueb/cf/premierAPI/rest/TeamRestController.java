@@ -1,79 +1,54 @@
 package gr.aueb.cf.premierAPI.rest;
 
+import gr.aueb.cf.premierAPI.dto.TeamInsertDTO;
 import gr.aueb.cf.premierAPI.model.Team;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityAlreadyExistsException;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
+import gr.aueb.cf.premierAPI.service.ITeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/teams")
 public class TeamRestController {
 
-    private final CrudService teamService;
-
+    private final ITeamService teamService;
 
     @Autowired
-    public TeamRestController(CrudService teamService) {
+    public TeamRestController(ITeamService teamService) {
         this.teamService = teamService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Team>> getAllTeams() {
-        List<Team> teams;
+    @PostMapping
+    public ResponseEntity<TeamInsertDTO> insert(@RequestBody TeamInsertDTO dto) {
         try {
-            teams = teamService.getAll();
-            return new ResponseEntity<>(teams, HttpStatus.OK);
+            Team team = teamService.insert(dto);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(team.getId())
+                    .toUri();
+
+            return ResponseEntity.created(location).body(dto);
+
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Team> getTeamById(@PathVariable Long id) {
+    public ResponseEntity<Team> getById(@PathVariable Long id) {
         Team team;
         try {
-            team = (Team) teamService.getById(id);
+            team = teamService.getById(id);
             return new ResponseEntity<>(team, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    @PostMapping
-    public ResponseEntity<Team> createTeam(@RequestBody Team team) {
-        Team createdTeam;
-        try{
-            createdTeam = (Team) teamService.create(team);
-            return new ResponseEntity<>(createdTeam, HttpStatus.CREATED);
-        } catch (EntityAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Team> updateTeam(@PathVariable Long id, @RequestBody Team team) {
-        Team updatedTeam;
-        try {
-            updatedTeam = (Team) teamService.update(id, team);
-            return new ResponseEntity<>(updatedTeam, HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
-        try {
-            teamService.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
 }

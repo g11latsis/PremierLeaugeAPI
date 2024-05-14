@@ -1,5 +1,7 @@
 package gr.aueb.cf.premierAPI.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +12,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TeamInsertDTO {
+    @NotBlank
     private String name;
-    private String stadiumName;
-    private int stadiumCapacity;
-    private String coachName;
-    private String coachSurname;
-    private int coachAge;
+
+    @NotNull
+    private Long stadiumId;
+
+    @NotNull
+    private Long coachId;
 }

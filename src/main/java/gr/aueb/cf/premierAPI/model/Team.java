@@ -1,6 +1,8 @@
 package gr.aueb.cf.premierAPI.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,8 +32,10 @@ public class Team extends AbstractEntity{
     @JoinColumn(name = "coach_id", referencedColumnName = "id")
     private Coach coach;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonBackReference
+    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JsonBackReference
+    @JsonManagedReference
+    @JsonIgnoreProperties("team")
     private List<Player> players;
 
 }

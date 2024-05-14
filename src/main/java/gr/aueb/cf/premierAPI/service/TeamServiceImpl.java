@@ -2,6 +2,7 @@ package gr.aueb.cf.premierAPI.service;
 
 import gr.aueb.cf.premierAPI.dto.TeamInsertDTO;
 import gr.aueb.cf.premierAPI.dto.TeamUpdateDTO;
+import gr.aueb.cf.premierAPI.mapper.TeamMapper;
 import gr.aueb.cf.premierAPI.model.Team;
 import gr.aueb.cf.premierAPI.repository.TeamRepository;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityAlreadyExistsException;
@@ -25,8 +26,22 @@ public class TeamServiceImpl implements ITeamService{
     }
 
     @Override
+    @Transactional
     public Team insert(TeamInsertDTO dto) throws EntityAlreadyExistsException {
-        return null;
+        try {
+            Team team = TeamMapper.convertToEntity(dto);
+
+            if (teamRepository.findTeamByName(dto.getName()) != null) {
+                throw new EntityAlreadyExistsException(Team.class,0L);
+            }
+            log.info("Team inserted: " + team);
+            return teamRepository.save(team);
+
+        }catch (Exception e) {
+            log.error("Error inserting team: " + e.getMessage());
+            throw e;
+        }
+
     }
 
     @Override
@@ -45,7 +60,19 @@ public class TeamServiceImpl implements ITeamService{
     }
 
     @Override
-    public List<Team> getById(Long id) throws EntityNotFoundException {
-        return null;
+    public Team getById(Long id) throws EntityNotFoundException {
+        Team team;
+        try{
+            team = teamRepository.findTeamById(id);
+            if(team == null){
+                throw new EntityNotFoundException(Team.class, id);
+            }
+            log.info("Team found: " + team);
+
+        }catch (EntityNotFoundException e){
+            log.error("Error getting team by id: " + e.getMessage());
+            throw e;
+        }
+        return team;
     }
 }

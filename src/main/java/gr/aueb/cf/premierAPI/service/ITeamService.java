@@ -13,5 +13,5 @@ public interface ITeamService {
     Team update(TeamUpdateDTO dto) throws EntityNotFoundException;
     Team delete(Long id) throws Exception;
     List<Team> getTeamByName(String name) throws EntityNotFoundException;
-    List<Team> getById(Long id) throws EntityNotFoundException;
+    Team getById(Long id) throws EntityNotFoundException;
 }
