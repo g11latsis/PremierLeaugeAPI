@@ -28,11 +28,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "user")
-    private Player player;
-
-    @OneToOne(mappedBy = "user")
-    private Coach coach;
+//    @OneToOne(mappedBy = "user")
+//    private Player player;
+//
+//    @OneToOne(mappedBy = "user")
+//    private Coach coach;
 
 }
 

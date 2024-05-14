@@ -1,12 +1,16 @@
 package gr.aueb.cf.premierAPI.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.util.List;
 
-@Data
+
+@AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "teams")
 public class Team extends AbstractEntity{
@@ -18,13 +22,16 @@ public class Team extends AbstractEntity{
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "stadium_id", referencedColumnName = "id")
     private Stadium stadium;
 
-    @OneToOne(mappedBy = "team")
-    private Coach coach; // Assuming one coach per team
+    @OneToOne
+    @JoinColumn(name = "coach_id", referencedColumnName = "id")
+    private Coach coach;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Player> players;
+
 }

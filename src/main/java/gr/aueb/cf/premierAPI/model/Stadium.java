@@ -1,11 +1,13 @@
 package gr.aueb.cf.premierAPI.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "stadiums")
 public class Stadium extends AbstractEntity{
@@ -19,8 +21,5 @@ public class Stadium extends AbstractEntity{
 
     @Column(nullable = false)
     private int capacity;
-
-    @Column(name = "team_id") // Assuming one team per stadium
-    private Long teamId;
 
 }

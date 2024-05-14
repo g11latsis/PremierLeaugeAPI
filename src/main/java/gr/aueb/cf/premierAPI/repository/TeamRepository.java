@@ -1,0 +1,11 @@
+package gr.aueb.cf.premierAPI.repository;
+
+import gr.aueb.cf.premierAPI.model.Team;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface TeamRepository extends JpaRepository<Team, Long> {
+    Team findTeamById(Long id);
+    Team findTeamByName(String name);
+}

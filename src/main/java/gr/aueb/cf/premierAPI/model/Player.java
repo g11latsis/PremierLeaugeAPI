@@ -1,14 +1,13 @@
 package gr.aueb.cf.premierAPI.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Player extends AbstractEntity{
@@ -22,35 +21,9 @@ public class Player extends AbstractEntity{
     private int age;
     private String position;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
-
     @ManyToOne
     @JoinColumn(name = "team_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Team team;
 
-    public void setTeam(Team team) {
-        this.team = team;
-        team.getPlayers().add(this);
-    }
-
-    public void removeTeam() {
-        if (team != null) {
-            team.getPlayers().remove(this);
-            team = null;
-        }
-    }
-
-    public void addUser(User user) {
-        this.user = user;
-        user.setPlayer(this);
-    }
-
-    public void removeUser() {
-        if (user != null) {
-            user.setPlayer(null);
-            user = null;
-        }
-    }
 }
