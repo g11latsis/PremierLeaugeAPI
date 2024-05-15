@@ -1,6 +1,7 @@
 package gr.aueb.cf.premierAPI.rest;
 
 import gr.aueb.cf.premierAPI.dto.TeamInsertDTO;
+import gr.aueb.cf.premierAPI.dto.TeamUpdateDTO;
 import gr.aueb.cf.premierAPI.model.Team;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityAlreadyExistsException;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
@@ -40,6 +41,41 @@ public class TeamRestController {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TeamUpdateDTO> update(@PathVariable Long id, @RequestBody TeamUpdateDTO dto) {
+
+        try {
+            Team team = teamService.getById(id);
+            Team updatedTeam = teamService.update(dto);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Team> delete(@PathVariable Long id) {
+        try {
+            Team team = teamService.getById(id);
+            teamService.delete(id);
+            return new ResponseEntity<>(team, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Team> getTeamByName(@RequestParam String name) {
+        Team team;
+        try {
+            team = teamService.getTeamByName(name);
+            return new ResponseEntity<>(team, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Team> getById(@PathVariable Long id) {

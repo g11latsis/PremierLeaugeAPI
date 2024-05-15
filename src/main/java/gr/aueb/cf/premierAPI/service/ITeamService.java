@@ -11,7 +11,7 @@ import java.util.List;
 public interface ITeamService {
     Team insert(TeamInsertDTO dto) throws EntityAlreadyExistsException;
     Team update(TeamUpdateDTO dto) throws EntityNotFoundException;
-    Team delete(Long id) throws Exception;
-    List<Team> getTeamByName(String name) throws EntityNotFoundException;
+    Team delete(Long id) throws EntityNotFoundException;
+    Team getTeamByName(String name) throws EntityNotFoundException;
     Team getById(Long id) throws EntityNotFoundException;
 }
