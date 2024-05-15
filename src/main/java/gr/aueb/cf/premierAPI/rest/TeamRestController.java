@@ -1,6 +1,7 @@
 package gr.aueb.cf.premierAPI.rest;
 
 import gr.aueb.cf.premierAPI.convert.TeamDTOConverter;
+import gr.aueb.cf.premierAPI.dto.TeamDetailsDTO;
 import gr.aueb.cf.premierAPI.dto.TeamInsertDTO;
 import gr.aueb.cf.premierAPI.dto.TeamResponseDTO;
 import gr.aueb.cf.premierAPI.dto.TeamUpdateDTO;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/teams")
@@ -29,16 +31,17 @@ public class TeamRestController {
     }
 
     @PostMapping
-    public ResponseEntity<TeamResponseDTO> insert(@RequestBody TeamInsertDTO dto) {
+    public ResponseEntity<TeamDetailsDTO> insert(@RequestBody TeamInsertDTO dto) {
         try {
             Team team = teamService.insert(dto);
-            TeamResponseDTO responseDTO = teamDTOConverter.convertTeamToResponseDto(team);
+            TeamDetailsDTO teamDetailsDTO = teamDTOConverter.convertTeamToDetailsDto(team);
+//            TeamResponseDTO responseDTO = teamDTOConverter.convertTeamToResponseDto(team);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(team.getId())
                     .toUri();
-
-            return ResponseEntity.created(location).body(responseDTO);
+            return ResponseEntity.created(location).body(teamDetailsDTO);
+//            return ResponseEntity.created(location).body(responseDTO);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
@@ -90,4 +93,10 @@ public class TeamRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/all")
+    public List<TeamDetailsDTO> getAllTeams(){
+        return teamService.getAllTeams();
+    }
+
 }

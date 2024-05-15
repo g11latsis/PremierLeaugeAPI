@@ -1,5 +1,7 @@
 package gr.aueb.cf.premierAPI.service;
 
+import gr.aueb.cf.premierAPI.dto.PlayerDTO;
+import gr.aueb.cf.premierAPI.dto.TeamDetailsDTO;
 import gr.aueb.cf.premierAPI.dto.TeamInsertDTO;
 import gr.aueb.cf.premierAPI.dto.TeamUpdateDTO;
 import gr.aueb.cf.premierAPI.convert.TeamDTOConverter;
@@ -10,6 +12,9 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -31,6 +36,7 @@ public class TeamServiceImpl implements ITeamService {
         Team team;
         try {
             team = teamRepository.save(teamDTOConverter.convertInsertDtoToTeam(dto));
+            System.out.println(team);
 
             if (team.getId() == null) {
                 throw new Exception("Error inserting team");
@@ -117,4 +123,15 @@ public class TeamServiceImpl implements ITeamService {
         }
         return team;
     }
+
+    @Override
+    @Transactional
+    public List<TeamDetailsDTO> getAllTeams() {
+        return teamRepository.findAll()
+                .stream()
+                .map(teamDTOConverter::convertTeamToDetailsDto)
+                .collect(Collectors.toList());
+
+    }
+
 }

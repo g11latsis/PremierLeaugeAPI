@@ -1,15 +1,9 @@
 package gr.aueb.cf.premierAPI.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-public class PlayerDTO {
+@Data
+public class PlayerDTO extends BaseDTO{
 
         private String firstname;
         private String lastname;
