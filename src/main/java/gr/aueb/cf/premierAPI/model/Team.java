@@ -32,7 +32,7 @@ public class Team extends AbstractEntity{
     @JoinColumn(name = "coach_id", referencedColumnName = "id")
     private Coach coach;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
 //    @JsonBackReference
     @JsonManagedReference
     @JsonIgnoreProperties("team")

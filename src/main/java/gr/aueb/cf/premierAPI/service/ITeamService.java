@@ -9,7 +9,7 @@ import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
 import java.util.List;
 
 public interface ITeamService {
-    Team insert(TeamInsertDTO dto) throws EntityAlreadyExistsException;
+    Team insert(TeamInsertDTO dto) throws Exception;
     Team update(TeamUpdateDTO dto) throws EntityNotFoundException;
     Team delete(Long id) throws EntityNotFoundException;
     Team getTeamByName(String name) throws EntityNotFoundException;

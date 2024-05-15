@@ -1,9 +1,10 @@
 package gr.aueb.cf.premierAPI.rest;
 
+import gr.aueb.cf.premierAPI.convert.TeamDTOConverter;
 import gr.aueb.cf.premierAPI.dto.TeamInsertDTO;
+import gr.aueb.cf.premierAPI.dto.TeamResponseDTO;
 import gr.aueb.cf.premierAPI.dto.TeamUpdateDTO;
 import gr.aueb.cf.premierAPI.model.Team;
-import gr.aueb.cf.premierAPI.service.Exceptions.EntityAlreadyExistsException;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
 import gr.aueb.cf.premierAPI.service.ITeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,29 +14,31 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/teams")
 public class TeamRestController {
 
     private final ITeamService teamService;
+    private final TeamDTOConverter teamDTOConverter;
 
     @Autowired
-    public TeamRestController(ITeamService teamService) {
+    public TeamRestController(ITeamService teamService, TeamDTOConverter teamDTOConverter) {
         this.teamService = teamService;
+        this.teamDTOConverter = teamDTOConverter;
     }
 
     @PostMapping
-    public ResponseEntity<TeamInsertDTO> insert(@RequestBody TeamInsertDTO dto) {
+    public ResponseEntity<TeamResponseDTO> insert(@RequestBody TeamInsertDTO dto) {
         try {
             Team team = teamService.insert(dto);
+            TeamResponseDTO responseDTO = teamDTOConverter.convertTeamToResponseDto(team);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(team.getId())
                     .toUri();
 
-            return ResponseEntity.created(location).body(dto);
+            return ResponseEntity.created(location).body(responseDTO);
 
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
