@@ -1,15 +1,12 @@
 package gr.aueb.cf.premierAPI.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class StadiumDTO {
+public class StadiumDTO extends BaseDTO {
 
         private String name;
         private int capacity;

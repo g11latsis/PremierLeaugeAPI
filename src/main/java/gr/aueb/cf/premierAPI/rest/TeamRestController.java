@@ -1,9 +1,8 @@
 package gr.aueb.cf.premierAPI.rest;
 
-import gr.aueb.cf.premierAPI.convert.TeamDTOConverter;
+import gr.aueb.cf.premierAPI.convert.TeamDtoConverter;
 import gr.aueb.cf.premierAPI.dto.TeamDetailsDTO;
 import gr.aueb.cf.premierAPI.dto.TeamInsertDTO;
-import gr.aueb.cf.premierAPI.dto.TeamResponseDTO;
 import gr.aueb.cf.premierAPI.dto.TeamUpdateDTO;
 import gr.aueb.cf.premierAPI.model.Team;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
@@ -22,10 +21,10 @@ import java.util.List;
 public class TeamRestController {
 
     private final ITeamService teamService;
-    private final TeamDTOConverter teamDTOConverter;
+    private final TeamDtoConverter teamDTOConverter;
 
     @Autowired
-    public TeamRestController(ITeamService teamService, TeamDTOConverter teamDTOConverter) {
+    public TeamRestController(ITeamService teamService, TeamDtoConverter teamDTOConverter) {
         this.teamService = teamService;
         this.teamDTOConverter = teamDTOConverter;
     }
@@ -35,14 +34,11 @@ public class TeamRestController {
         try {
             Team team = teamService.insert(dto);
             TeamDetailsDTO teamDetailsDTO = teamDTOConverter.convertTeamToDetailsDto(team);
-//            TeamResponseDTO responseDTO = teamDTOConverter.convertTeamToResponseDto(team);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(team.getId())
                     .toUri();
             return ResponseEntity.created(location).body(teamDetailsDTO);
-//            return ResponseEntity.created(location).body(responseDTO);
-
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }

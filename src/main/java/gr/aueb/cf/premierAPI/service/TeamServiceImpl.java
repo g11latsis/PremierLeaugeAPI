@@ -1,10 +1,9 @@
 package gr.aueb.cf.premierAPI.service;
 
-import gr.aueb.cf.premierAPI.dto.PlayerDTO;
 import gr.aueb.cf.premierAPI.dto.TeamDetailsDTO;
 import gr.aueb.cf.premierAPI.dto.TeamInsertDTO;
 import gr.aueb.cf.premierAPI.dto.TeamUpdateDTO;
-import gr.aueb.cf.premierAPI.convert.TeamDTOConverter;
+import gr.aueb.cf.premierAPI.convert.TeamDtoConverter;
 import gr.aueb.cf.premierAPI.model.Team;
 import gr.aueb.cf.premierAPI.repository.TeamRepository;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
@@ -21,11 +20,11 @@ import java.util.stream.Collectors;
 public class TeamServiceImpl implements ITeamService {
 
     private final TeamRepository teamRepository;
-    private final TeamDTOConverter teamDTOConverter;
+    private final TeamDtoConverter teamDTOConverter;
 
 
     @Autowired
-    public TeamServiceImpl(TeamRepository teamRepository, TeamDTOConverter teamDTOConverter) {
+    public TeamServiceImpl(TeamRepository teamRepository, TeamDtoConverter teamDTOConverter) {
         this.teamRepository = teamRepository;
         this.teamDTOConverter = teamDTOConverter;
     }
@@ -36,8 +35,6 @@ public class TeamServiceImpl implements ITeamService {
         Team team;
         try {
             team = teamRepository.save(teamDTOConverter.convertInsertDtoToTeam(dto));
-            System.out.println(team);
-
             if (team.getId() == null) {
                 throw new Exception("Error inserting team");
             }
@@ -48,7 +45,6 @@ public class TeamServiceImpl implements ITeamService {
             throw e;
         }
         return team;
-
     }
 
     @Override
@@ -131,7 +127,6 @@ public class TeamServiceImpl implements ITeamService {
                 .stream()
                 .map(teamDTOConverter::convertTeamToDetailsDto)
                 .collect(Collectors.toList());
-
     }
 
 }

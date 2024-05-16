@@ -1,7 +1,6 @@
 package gr.aueb.cf.premierAPI.convert;
 
 import gr.aueb.cf.premierAPI.dto.*;
-import gr.aueb.cf.premierAPI.model.Player;
 import gr.aueb.cf.premierAPI.model.Team;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +10,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class TeamDTOConverter {
+public class TeamDtoConverter {
 
     @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
-    private PlayerDTOConverter playerDTOConverter;
+    private PlayerDtoConverter playerDTOConverter;
 
     public Team convertInsertDtoToTeam(TeamInsertDTO dto) {
         return modelMapper.map(dto, Team.class);
@@ -26,14 +25,6 @@ public class TeamDTOConverter {
     public Team convertUpdateDtoToTeam(TeamUpdateDTO dto) {
         return modelMapper.map(dto, Team.class);
     }
-
-//    public TeamResponseDTO convertTeamToResponseDto(Team team) {
-//        TeamResponseDTO responseDTO = modelMapper.map(team, TeamResponseDTO.class);
-//        responseDTO.setCoachFirstName(team.getCoach().getFirstname());
-//        responseDTO.setCoachLastName(team.getCoach().getLastname());
-//        responseDTO.setStadiumName(team.getStadium().getName());
-//        return responseDTO;
-//    }
 
     public TeamDetailsDTO convertTeamToDetailsDto(Team team) {
         TeamDetailsDTO dto = new TeamDetailsDTO();

@@ -1,6 +1,5 @@
 package gr.aueb.cf.premierAPI.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -18,7 +17,7 @@ import java.util.List;
 public class Team extends AbstractEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
@@ -33,7 +32,6 @@ public class Team extends AbstractEntity{
     private Coach coach;
 
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
-//    @JsonBackReference
     @JsonManagedReference
     @JsonIgnoreProperties("team")
     private List<Player> players;
