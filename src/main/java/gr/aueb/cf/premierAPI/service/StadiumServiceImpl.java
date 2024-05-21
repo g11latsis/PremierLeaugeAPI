@@ -2,6 +2,8 @@ package gr.aueb.cf.premierAPI.service;
 
 import gr.aueb.cf.premierAPI.convert.StadiumDtoConverter;
 import gr.aueb.cf.premierAPI.dto.StadiumDTO;
+import gr.aueb.cf.premierAPI.dto.StadiumInsertDTO;
+import gr.aueb.cf.premierAPI.dto.StadiumUpdateDTO;
 import gr.aueb.cf.premierAPI.model.Stadium;
 import gr.aueb.cf.premierAPI.repository.StadiumRepository;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
@@ -28,9 +30,9 @@ public class StadiumServiceImpl implements IStadiumService {
 
     @Transactional
     @Override
-    public Stadium insert(StadiumDTO dto) throws Exception {
+    public Stadium insert(StadiumInsertDTO dto) throws Exception {
         try {
-            Stadium stadium = stadiumRepository.save(stadiumDtoConverter.convertStadiumDtoToStadium(dto));
+            Stadium stadium = stadiumRepository.save(stadiumDtoConverter.convertStadiumToStadiumInsertDto(dto));
             if (stadium.getId() == null) {
                 throw new Exception("Error inserting stadium");
             }
@@ -44,7 +46,7 @@ public class StadiumServiceImpl implements IStadiumService {
 
     @Transactional
     @Override
-    public Stadium update(StadiumDTO dto) throws EntityNotFoundException {
+    public Stadium update(StadiumUpdateDTO dto) throws EntityNotFoundException {
         Stadium stadium = null;
         Stadium updatedStadium = null;
         try {

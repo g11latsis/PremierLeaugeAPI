@@ -2,9 +2,12 @@ package gr.aueb.cf.premierAPI.rest;
 
 import gr.aueb.cf.premierAPI.convert.StadiumDtoConverter;
 import gr.aueb.cf.premierAPI.dto.StadiumDTO;
+import gr.aueb.cf.premierAPI.dto.StadiumInsertDTO;
+import gr.aueb.cf.premierAPI.dto.StadiumUpdateDTO;
 import gr.aueb.cf.premierAPI.model.Stadium;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
 import gr.aueb.cf.premierAPI.service.IStadiumService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,21 +29,22 @@ public class StadiumRestController {
     }
 
     @PostMapping
-    public ResponseEntity<StadiumDTO> insert(@RequestBody StadiumDTO dto) {
+    public ResponseEntity<StadiumDTO> insert(@Valid @RequestBody StadiumInsertDTO dto) {
         try {
-            stadiumService.insert(dto);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            Stadium stadium = stadiumService.insert(dto);
+            StadiumDTO stadiumDTO = stadiumDtoConverter.convertStadiumToStadiumDto(stadium);
+            return new ResponseEntity<>(stadiumDTO, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<StadiumDTO> update(@PathVariable Long id, @RequestBody StadiumDTO dto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<StadiumDTO> update(@PathVariable Long id, @Valid @RequestBody StadiumUpdateDTO dto) {
         try {
-            Stadium stadium = stadiumService.getById(id);
-            Stadium updatedStadium = stadiumService.update(dto);
-            return new ResponseEntity<>(dto, HttpStatus.OK);
+           Stadium stadium =  stadiumService.update(dto);
+           StadiumDTO stadiumDTO = stadiumDtoConverter.convertStadiumToStadiumDto(stadium);
+            return new ResponseEntity<>(stadiumDTO, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().build();
         }

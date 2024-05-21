@@ -13,8 +13,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class StadiumDTO {
-
+public class StadiumInsertDTO {
+    @NotBlank(message = "Stadium name is mandatory")
     private String name;
+
+    @NotNull(message = "Stadium capacity is mandatory")
+    @Min(value = 100, message = "Capacity should be greater than 100")
+    @Max(value = 120000, message = "Capacity should be less than 120000")
     private int capacity;
 }

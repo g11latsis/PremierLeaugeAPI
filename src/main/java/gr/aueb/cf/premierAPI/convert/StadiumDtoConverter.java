@@ -1,6 +1,8 @@
 package gr.aueb.cf.premierAPI.convert;
 
 import gr.aueb.cf.premierAPI.dto.StadiumDTO;
+import gr.aueb.cf.premierAPI.dto.StadiumInsertDTO;
+import gr.aueb.cf.premierAPI.dto.StadiumUpdateDTO;
 import gr.aueb.cf.premierAPI.model.Stadium;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,13 @@ public class StadiumDtoConverter {
         return modelMapper.map(stadium, StadiumDTO.class);
     }
 
-    public Stadium convertStadiumDtoToStadium(StadiumDTO dto) {
+    public Stadium convertStadiumDtoToStadium(StadiumUpdateDTO dto) {
 
         return modelMapper.map(dto, Stadium.class);
     }
+
+    public Stadium convertStadiumToStadiumInsertDto(StadiumInsertDTO dto) {
+        return modelMapper.map(dto, Stadium.class);
+    }
+
 }

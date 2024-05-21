@@ -31,7 +31,7 @@ public class Team extends AbstractEntity{
     @JoinColumn(name = "coach_id", referencedColumnName = "id")
     private Coach coach;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
     @JsonManagedReference
     @JsonIgnoreProperties("team")
     private List<Player> players;

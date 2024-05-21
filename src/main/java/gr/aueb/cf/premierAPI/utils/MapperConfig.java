@@ -15,7 +15,6 @@ public class MapperConfig {
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
-        // Define explicit mapping for the 'id' property
         modelMapper.addMappings(new PropertyMap<TeamInsertDTO, Team>() {
             @Override
             protected void configure() {

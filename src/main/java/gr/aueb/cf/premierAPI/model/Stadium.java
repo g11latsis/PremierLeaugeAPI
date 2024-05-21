@@ -14,7 +14,7 @@ import lombok.*;
 public class Stadium extends AbstractEntity{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column

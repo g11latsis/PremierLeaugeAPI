@@ -29,16 +29,17 @@ public class TeamRestController {
         this.teamDTOConverter = teamDTOConverter;
     }
 
+
     @PostMapping
-    public ResponseEntity<TeamDetailsDTO> insert(@RequestBody TeamInsertDTO dto) {
+    public ResponseEntity<Team> insert(@RequestBody TeamInsertDTO dto) {
         try {
             Team team = teamService.insert(dto);
-            TeamDetailsDTO teamDetailsDTO = teamDTOConverter.convertTeamToDetailsDto(team);
+//            TeamDetailsDTO teamDetailsDTO = teamDTOConverter.convertTeamToDetailsDto(team);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(team.getId())
                     .toUri();
-            return ResponseEntity.created(location).body(teamDetailsDTO);
+            return ResponseEntity.created(location).body(team);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
@@ -57,22 +58,24 @@ public class TeamRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Team> delete(@PathVariable Long id) {
+    public ResponseEntity<TeamDetailsDTO> delete(@PathVariable Long id) {
         try {
             Team team = teamService.getById(id);
+            TeamDetailsDTO dto = teamDTOConverter.convertTeamToDetailsDto(team);
             teamService.delete(id);
-            return new ResponseEntity<>(team, HttpStatus.OK);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("")
-    public ResponseEntity<Team> getTeamByName(@RequestParam String name) {
+    public ResponseEntity<TeamDetailsDTO> getTeamByName(@RequestParam String name) {
         Team team;
         try {
             team = teamService.getTeamByName(name);
-            return new ResponseEntity<>(team, HttpStatus.OK);
+            TeamDetailsDTO dto = teamDTOConverter.convertTeamToDetailsDto(team);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -80,19 +83,19 @@ public class TeamRestController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Team> getById(@PathVariable Long id) {
+    public ResponseEntity<TeamDetailsDTO> getById(@PathVariable Long id) {
         Team team;
         try {
             team = teamService.getById(id);
-            return new ResponseEntity<>(team, HttpStatus.OK);
+            TeamDetailsDTO dto = teamDTOConverter.convertTeamToDetailsDto(team);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/all")
-    public List<TeamDetailsDTO> getAllTeams(){
+    public List<TeamDetailsDTO> getAllTeams() {
         return teamService.getAllTeams();
     }
-
 }

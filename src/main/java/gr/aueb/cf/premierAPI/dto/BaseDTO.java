@@ -12,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BaseDTO {
+
     @NotNull
     private Long id;
 }

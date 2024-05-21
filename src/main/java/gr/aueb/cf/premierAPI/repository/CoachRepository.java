@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface CoachRepository extends JpaRepository<Coach, Long>{
-    List<Coach> findByLastname(String lastname);
+    Coach findByLastname(String lastname);
     Coach findCoachById(Long id);
 }
