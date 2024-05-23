@@ -1,6 +1,6 @@
 package gr.aueb.cf.premierAPI.service;
 
-import gr.aueb.cf.premierAPI.dto.TeamDetailsDTO;
+import gr.aueb.cf.premierAPI.dto.TeamDTO;
 import gr.aueb.cf.premierAPI.dto.TeamInsertDTO;
 import gr.aueb.cf.premierAPI.dto.TeamUpdateDTO;
 import gr.aueb.cf.premierAPI.convert.TeamDtoConverter;
@@ -31,20 +31,16 @@ public class TeamServiceImpl implements ITeamService {
 
     @Override
     @Transactional
-    public Team insert(TeamInsertDTO dto) throws Exception {
-        Team team;
+    public TeamDTO insert(TeamInsertDTO dto) throws Exception {
         try {
-            team = teamRepository.save(teamDTOConverter.convertInsertDtoToTeam(dto));
-            if (team.getId() == null) {
-                throw new Exception("Error inserting team");
-            }
+            Team team = teamDTOConverter.ConvertToEntity(dto);
+            team = teamRepository.save(team);
             log.info("Team inserted: " + team);
-
+            return teamDTOConverter.convertTeamToDTO(team);
         } catch (Exception e) {
             log.error("Error inserting team: " + e.getMessage());
             throw e;
         }
-        return team;
     }
 
     @Override
@@ -63,7 +59,7 @@ public class TeamServiceImpl implements ITeamService {
             log.error("Error updating team: " + e.getMessage());
             throw e;
         }
-        return team;
+        return updatedTeam;
     }
 
     @Override
@@ -122,10 +118,10 @@ public class TeamServiceImpl implements ITeamService {
 
     @Override
     @Transactional
-    public List<TeamDetailsDTO> getAllTeams() {
+    public List<TeamDTO> getAllTeams() {
         return teamRepository.findAll()
                 .stream()
-                .map(teamDTOConverter::convertTeamToDetailsDto)
+                .map(teamDTOConverter::convertTeamToDTO)
                 .collect(Collectors.toList());
     }
 

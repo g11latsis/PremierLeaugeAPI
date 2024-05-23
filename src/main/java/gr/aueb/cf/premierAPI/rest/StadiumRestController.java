@@ -7,6 +7,9 @@ import gr.aueb.cf.premierAPI.dto.StadiumUpdateDTO;
 import gr.aueb.cf.premierAPI.model.Stadium;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
 import gr.aueb.cf.premierAPI.service.IStadiumService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,11 @@ public class StadiumRestController {
         this.stadiumDtoConverter = stadiumDtoConverter;
     }
 
+    @Operation(summary = "Insert a new stadium")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Stadium created"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PostMapping
     public ResponseEntity<StadiumDTO> insert(@Valid @RequestBody StadiumInsertDTO dto) {
         try {
@@ -39,6 +47,11 @@ public class StadiumRestController {
         }
     }
 
+    @Operation(summary = "Update an existing stadium")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Stadium updated"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<StadiumDTO> update(@PathVariable Long id, @Valid @RequestBody StadiumUpdateDTO dto) {
         try {
@@ -50,6 +63,11 @@ public class StadiumRestController {
         }
     }
 
+    @Operation(summary = "Delete an existing stadium")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Stadium deleted"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<StadiumDTO> delete(@PathVariable Long id) {
         try {
@@ -62,6 +80,11 @@ public class StadiumRestController {
         }
     }
 
+    @Operation(summary = "Get a stadium by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Stadium found"),
+            @ApiResponse(responseCode = "404", description = "Stadium not found")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<StadiumDTO> getById(@PathVariable Long id) {
         Stadium stadium;
@@ -74,6 +97,11 @@ public class StadiumRestController {
         }
     }
 
+    @Operation(summary = "Get a stadium by name")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Stadium found"),
+            @ApiResponse(responseCode = "404", description = "Stadium not found")
+    })
     @GetMapping("")
     public ResponseEntity<StadiumDTO> getStadiumByName(@RequestParam String name) {
         Stadium stadium;
@@ -86,6 +114,11 @@ public class StadiumRestController {
         }
     }
 
+    @Operation(summary = "Get all stadiums")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Stadiums found"),
+            @ApiResponse(responseCode = "404", description = "Stadiums not found")
+    })
     @GetMapping("/all")
     public List<StadiumDTO> getAllStadiums() {
         return stadiumService.getAllStadiums();

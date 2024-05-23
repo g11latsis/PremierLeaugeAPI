@@ -8,6 +8,7 @@ import gr.aueb.cf.premierAPI.model.Player;
 import gr.aueb.cf.premierAPI.service.IPlayerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -46,8 +47,13 @@ public class PlayerRestController {
     @PutMapping("/{id}")
     public ResponseEntity<PlayerDTO> update(@PathVariable Long id, @Valid @RequestBody PlayerUpdateDTO dto) {
         try {
-            Player player = playerService.update(dto);
-            PlayerDTO playerDTO = playerDtoConverter.convertPlayerToDTO(player);
+
+            Player player = playerService.getById(id);
+            if (player == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            Player updatedPlayer = playerService.update(dto);
+            PlayerDTO playerDTO = playerDtoConverter.convertPlayerToDTO(updatedPlayer);
             return ResponseEntity.ok(playerDTO);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

@@ -1,7 +1,7 @@
 # PremierLeagueAPI
 
 ## Description
-This is a RESTful API for the Premier League. It provides information about stadiums and their capacities.
+This is a REST API for the Premier League. It provides information about stadiums,teams,players,coaches.
 
 ## Technologies Used
 - Java 17
@@ -10,6 +10,7 @@ This is a RESTful API for the Premier League. It provides information about stad
 - MySQL
 - Lombok
 - ModelMapper
+- Swagger
 
 ## Setup and Installation
 1. Clone the repository.
