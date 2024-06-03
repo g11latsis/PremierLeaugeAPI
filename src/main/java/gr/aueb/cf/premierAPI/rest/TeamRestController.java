@@ -7,6 +7,9 @@ import gr.aueb.cf.premierAPI.dto.TeamUpdateDTO;
 import gr.aueb.cf.premierAPI.model.Team;
 import gr.aueb.cf.premierAPI.service.Exceptions.EntityNotFoundException;
 import gr.aueb.cf.premierAPI.service.ITeamService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +34,11 @@ public class TeamRestController {
     }
 
 
+    @Operation(summary = "Insert a new team")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Team created"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PostMapping
     public ResponseEntity<TeamDTO> insert(@Valid @RequestBody TeamInsertDTO dto) {
         try {
@@ -45,6 +53,11 @@ public class TeamRestController {
         }
     }
 
+    @Operation(summary = "Update an existing team")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Team updated"),
+            @ApiResponse(responseCode = "503", description = "Service unavailable")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<TeamDTO> update(@PathVariable Long id,@Valid @RequestBody TeamUpdateDTO dto) {
 
@@ -61,6 +74,11 @@ public class TeamRestController {
         }
     }
 
+    @Operation(summary = "Delete an existing team")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Team deleted"),
+            @ApiResponse(responseCode = "503", description = "Service unavailable")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<TeamDTO> delete(@PathVariable Long id) {
         try {
@@ -73,6 +91,11 @@ public class TeamRestController {
         }
     }
 
+    @Operation(summary = "Get a team by name")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Team found"),
+            @ApiResponse(responseCode = "404", description = "Team not found")
+    })
     @GetMapping("")
     public ResponseEntity<TeamDTO> getTeamByName(@RequestParam String name) {
         Team team;
@@ -85,7 +108,11 @@ public class TeamRestController {
         }
     }
 
-
+    @Operation(summary = "Get a team by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Team found"),
+            @ApiResponse(responseCode = "404", description = "Team not found")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<TeamDTO> getById(@PathVariable Long id) {
         Team team;
@@ -98,6 +125,11 @@ public class TeamRestController {
         }
     }
 
+    @Operation(summary = "Get all teams")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Teams found"),
+            @ApiResponse(responseCode = "503", description = "Service unavailable")
+    })
     @GetMapping("/all")
     public List<TeamDTO> getAllTeams() {
         return teamService.getAllTeams();

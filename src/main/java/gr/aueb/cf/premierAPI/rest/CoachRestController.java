@@ -5,6 +5,9 @@ import gr.aueb.cf.premierAPI.dto.CoachDTO;
 import gr.aueb.cf.premierAPI.dto.CoachInsertDTO;
 import gr.aueb.cf.premierAPI.model.Coach;
 import gr.aueb.cf.premierAPI.service.ICoachService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,11 @@ public class CoachRestController {
         this.coachDtoConverter = coachDtoConverter;
     }
 
+    @Operation(summary = "Insert a new coach")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Coach created"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PostMapping
     public ResponseEntity<CoachDTO> insert(@Valid @RequestBody CoachInsertDTO dto) {
         try {
@@ -43,6 +51,11 @@ public class CoachRestController {
         }
     }
 
+    @Operation(summary = "Update an existing coach")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Coach updated"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<CoachDTO> update(@PathVariable Long id, @Valid @RequestBody CoachDTO dto) {
         try {
@@ -53,6 +66,11 @@ public class CoachRestController {
         }
     }
 
+    @Operation(summary = "Delete an existing coach")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Coach deleted"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<CoachDTO> delete(@PathVariable Long id) {
         try {
@@ -65,6 +83,11 @@ public class CoachRestController {
         }
     }
 
+    @Operation(summary = "Get a coach by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Coach found"),
+            @ApiResponse(responseCode = "404", description = "Coach not found")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<CoachDTO> getById(@PathVariable Long id) {
         try {
@@ -76,6 +99,11 @@ public class CoachRestController {
         }
     }
 
+    @Operation(summary = "Get a coach by lastname")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Coach found"),
+            @ApiResponse(responseCode = "404", description = "Coach not found")
+    })
     @GetMapping("")
     public ResponseEntity<CoachDTO> getCoachByLastname(@RequestParam String lastname) {
         try {
@@ -87,6 +115,11 @@ public class CoachRestController {
         }
     }
 
+    @Operation(summary = "Get all coaches")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Coaches found"),
+            @ApiResponse(responseCode = "503", description = "Service unavailable")
+    })
     @GetMapping("/all")
     public List<CoachDTO> getAllCoaches() {
         return coachService.getAllCoaches();
